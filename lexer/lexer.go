@@ -1,7 +1,6 @@
 package lexer
 
 import (
-	"fmt"
 	"monkey-lang/token"
 )
 
@@ -38,6 +37,18 @@ func (l *Lexer) NextToken() token.Token {
 		return newToken(token.ASSIGN, ch)
 	case '+':
 		return newToken(token.PLUS, ch)
+	case '-':
+		return newToken(token.MINUS, ch)
+	case '*':
+		return newToken(token.AESTRIK, ch)
+	case '/':
+		return newToken(token.SLASH, ch)
+	case '!':
+		return newToken(token.BANG, ch)
+	case '<':
+		return newToken(token.LT, ch)
+	case '>':
+		return newToken(token.GT, ch)
 	case ',':
 		return newToken(token.COMMA, ch)
 	case ';':
@@ -60,7 +71,6 @@ func (l *Lexer) NextToken() token.Token {
 		} else if isDigit(ch) {
 			shouldConsumeChar = false
 			num := l.readNumber()
-			fmt.Println(num)
 			return newToken(token.INT, num)
 		}
 	}
