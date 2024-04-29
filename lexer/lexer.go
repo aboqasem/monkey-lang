@@ -34,6 +34,10 @@ func (l *Lexer) NextToken() token.Token {
 	ch := l.ch
 	switch ch {
 	case '=':
+		if l.peekChar() == '=' {
+			lit := string(ch) + string(l.readChar())
+			return newToken(token.EQ, lit)
+		}
 		return newToken(token.ASSIGN, ch)
 	case '+':
 		return newToken(token.PLUS, ch)
@@ -44,6 +48,10 @@ func (l *Lexer) NextToken() token.Token {
 	case '/':
 		return newToken(token.SLASH, ch)
 	case '!':
+		if l.peekChar() == '=' {
+			lit := string(ch) + string(l.readChar())
+			return newToken(token.NOT_EQ, lit)
+		}
 		return newToken(token.BANG, ch)
 	case '<':
 		return newToken(token.LT, ch)
@@ -82,14 +90,20 @@ func newToken[L byte | string](tokType token.TokenType, lit L) token.Token {
 	return token.Token{Type: tokType, Literal: string(lit)}
 }
 
-func (l *Lexer) readChar() {
-	if l.readPosition >= l.inputLen {
-		l.ch = 0
-	} else {
-		l.ch = l.input[l.readPosition]
-	}
+func (l *Lexer) readChar() (ch byte) {
+	ch = l.peekChar()
+	l.ch = ch
 	l.currPosition = l.readPosition
 	l.readPosition += 1
+	return
+}
+
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= l.inputLen {
+		return 0
+	} else {
+		return l.input[l.readPosition]
+	}
 }
 
 func isWhitespace(ch byte) bool {
