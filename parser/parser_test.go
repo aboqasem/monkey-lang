@@ -17,6 +17,7 @@ let foobar = 838383;
 	p := New(l)
 
 	prog := p.Parse()
+	checkParserErrors(t, p)
 
 	if prog == nil {
 		t.Fatal("Parse() returned nil")
@@ -60,4 +61,17 @@ func testLetStatements(t *testing.T, stmt ast.Statement, expectedName string) bo
 	}
 
 	return true
+}
+
+func checkParserErrors(t *testing.T, p *Parser) {
+	errors := p.Errors()
+	if len(errors) == 0 {
+		return
+	}
+
+	t.Errorf("parser has %d errors", len(errors))
+	for _, msg := range errors {
+		t.Errorf("parser error: %s", msg)
+	}
+	t.FailNow()
 }
