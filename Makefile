@@ -63,12 +63,7 @@ build:
 build/prod:
 	go build -tags netgo -ldflags '-s -w' -o=./${BINARY_NAME} ${MAIN_PACKAGE_PATH}
 
-## run: run the binary
+## run: run the  binary
 .PHONY: run
 run: build
 	./tmp/${BINARY_NAME}
-
-# run/live: run the binary with reloading on file changes
-.PHONY: run/live
-run/live:
-		go run github.com/cosmtrek/air@v1.49.0
